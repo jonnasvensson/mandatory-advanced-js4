@@ -16,7 +16,6 @@ import Game from './components/Game';
                     alignItems: "center",
                 }}>
                 <h2>Connect four</h2>
-                <h3>Active player : </h3>
                 <Game />
             </div>
       );

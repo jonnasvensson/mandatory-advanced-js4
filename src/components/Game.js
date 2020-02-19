@@ -2,55 +2,109 @@ import React, { useReducer } from 'react';
 
 import Grid from './Grid';
 import ResetButton from './ResetButton';
+import { checkWinner } from './CheckWinner';
 
+function board() {
+    let rows = Array(6).fill(null);   // 6st rader
+    return rows.map(() => Array(7).fill(null));
+}
 
-let rows = Array(6).fill(null);   // 6st rader
-
-rows = rows.map(() => Array(7).fill(null));
 
 export default function Game() {
 
-    const [state, dispatch] = useReducer(reducer, { rows, x: 0, y: 0 }, ); //    reducer function är functionen ovan!
-    
-    return(
+    const [state, dispatch] = useReducer(reducer, {
+        rows: board(),
+        idx: 0,
+        idy: 0,
+        player: 'red',
+        gameOver: false
+    }); // rows, x, y är states!
+
+    return (
         <div>
+            <h2>{state.player}</h2>
             <Grid
-            rows={state.rows}
-            onClickCircle={(x, y)=> dispatch({ type: 'color', x, y})} />
-            <p>{state.x} {state.y}</p>
-            <ResetButton
-            onClickReset={() => dispatch({ type: 'reset' })} />
+                rows={state.rows}
+                onClickCircle={(idx, idy) => dispatch({ type: 'circle', idx, idy })} />
+            <div>
+                {
+                    state.gameOver && (
+                        <>
+                            <p>Winner is {state.player}</p>
+                            <ResetButton onClickReset={() => dispatch({ type: 'reset' })} />
+                        </>
+                    )
+                }
+            </div>
         </div>
     );
 }
 
+
 function reducer(state, action) {
     switch (action.type) {
-        case 'color':
-            const { x, y } = action;
-            console.log(state, action.x, action.y);
+        case 'circle':
+            if (state.gameOver) return state;
+            const { idx, idy } = action;
+            console.log('X : ' + action.idx, 'Y : ' + action.idy);
+            console.log(state.player);
 
-            const newRows = [...state.rows];
-            const newColumn = [...newRows[x]];
+            console.log(state.rows);
 
-            newColumn[y] = "red";
-            newRows[x] = newColumn;
+            let y = 5;
+            while (y >= 0) {
+                if (state.rows[y][idx] === null) {  //  Denna kollar att state.rows på y axel och platsen idx = null då kan man inte markerar den circeln som klickas på utan trillar längst ned!
+                    break;
+                }
+                y--;
+            }
+            if (y < 0) {
+                return state;
+            }
+
+            const newRows = [...state.rows]; // newRows kopierar det som finns i state.row från useReducer och läggs i newRows
+            const newRow = [...newRows[y]];  //newRow kopierar newRows[index]
+
+            newRow[idx] = state.player;
+            newRows[y] = newRow;
+            console.log(y);
 
             return {
+                ...state,
                 rows: newRows,
-                x: action.x,
-                y: action.y
+                player: !checkWinner(newRows) ? (state.player === 'red' ? 'blue' : 'red') : state.player,
+                gameOver: checkWinner(newRows) // Denna rad är samma som if sats nedan!
             };
+
+                  /* 
+                         if (checkWinner(newRows)) {    
+                             return {
+                                 ...state,
+                                 rows: newRows,
+                                 gameOver: true,
+                             }
+                        }   
+             */
+
         case 'reset':
             console.log('click');
-            
-            return state; 
-            default: 
+            return {
+                rows: board(),
+                idx: 0,
+                idy: 0,
+                player: 'red',
+                gameOver: false
+            };
+
+        default:
             return state;
     }
 }
 
 
+
+
 // action.type loggar case 'namn'
 // type = case
 // action loggar ett object som har innehållet i din dispatch
+

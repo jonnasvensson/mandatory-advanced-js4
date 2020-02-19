@@ -4,7 +4,6 @@ export default function Grid({onClickCircle, rows}) {
 
     return(
         <div>
-            <h2>Grid</h2>
             <div className="gridWrapper"
                 style={{ 
                     width: 300,
@@ -16,26 +15,27 @@ export default function Grid({onClickCircle, rows}) {
                     flexDirection: "column",
                     justifyContent: "space-around"}}>
             {
-                rows.map((row, x) => {
+                rows.map((row, idy) => {
                     return <div className="rows"
-                        key={x}
+                        key={idy}
                         style={{
                             margin: 3,
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "space-around"
                         }}> 
-                    {row.map((circle, y) => {
-                            return <div className="circle" key={y}
+                    {row.map((circle, idx) => {
+                            return <div className="circle" key={idx}
                             style={{
                             width: 40,
                             height: 40,
                             borderRadius: 40,
                             backgroundColor: circle ? circle : "white",
                             display: "flex",
-                            alignContent: "space-around"
+                            alignContent: "space-around",
+                            cursor: "pointer"
                             }}
-                            onClick={(e) => onClickCircle(x, y)}>x={x}, y={y}</div>
+                            onClick={(e) => onClickCircle(idx, idy)}></div>
                     })}</div>
                 })
             }
