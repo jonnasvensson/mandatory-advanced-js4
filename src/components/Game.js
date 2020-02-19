@@ -9,28 +9,28 @@ function board() {
     return rows.map(() => Array(7).fill(null));
 }
 
-
 export default function Game() {
-
     const [state, dispatch] = useReducer(reducer, {
         rows: board(),
         idx: 0,
         idy: 0,
         player: 'red',
-        gameOver: false
+        gameOver: false,
+        countClick: 1,
+        tie: false,
     }); // rows, x, y är states!
-
+    let playerTurn = state.player;
     return (
         <div>
-            <h2>{state.player}</h2>
+            <h2>{playerTurn}</h2>
             <Grid
                 rows={state.rows}
                 onClickCircle={(idx, idy) => dispatch({ type: 'circle', idx, idy })} />
             <div>
                 {
-                    state.gameOver && (
+                    (state.gameOver || state.tie) && (   
                         <>
-                            <p>Winner is {state.player}</p>
+                        <p>{ state.gameOver ? `THE WINNER IS  ${state.player}` : `ITS A TIE!`}</p>
                             <ResetButton onClickReset={() => dispatch({ type: 'reset' })} />
                         </>
                     )
@@ -61,19 +61,21 @@ function reducer(state, action) {
             if (y < 0) {
                 return state;
             }
-
             const newRows = [...state.rows]; // newRows kopierar det som finns i state.row från useReducer och läggs i newRows
             const newRow = [...newRows[y]];  //newRow kopierar newRows[index]
 
             newRow[idx] = state.player;
             newRows[y] = newRow;
             console.log(y);
-
+            console.log(state.countClick);
+            
             return {
                 ...state,
                 rows: newRows,
                 player: !checkWinner(newRows) ? (state.player === 'red' ? 'blue' : 'red') : state.player,
-                gameOver: checkWinner(newRows) // Denna rad är samma som if sats nedan!
+                gameOver: checkWinner(newRows), // Denna rad är samma som if sats nedan!
+                countClick: state.countClick+1, 
+                tie: state.countClick === 42 ? true : false,
             };
 
                   /* 
@@ -100,9 +102,6 @@ function reducer(state, action) {
             return state;
     }
 }
-
-
-
 
 // action.type loggar case 'namn'
 // type = case

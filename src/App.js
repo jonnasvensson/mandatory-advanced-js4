@@ -15,7 +15,7 @@ import Game from './components/Game';
                     flexDirection: "column",
                     alignItems: "center",
                 }}>
-                <h2>Connect four</h2>
+                <h2>Anna's connect four</h2>
                 <Game />
             </div>
       );
