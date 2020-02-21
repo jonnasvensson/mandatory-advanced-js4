@@ -14,8 +14,8 @@ import Game from './components/Game';
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
+                    fontFamily: "Libre Franklin",
                 }}>
-                <h2>Anna's connect four</h2>
                 <Game />
             </div>
       );

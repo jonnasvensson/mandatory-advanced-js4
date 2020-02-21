@@ -7,6 +7,12 @@ export default function ResetButton({ onClickReset }) {
         style={{
             margin: 5,
             borderRadius: 8,
+            height: 50,
+            width: 300,
+            backgroundColor: "palevioletred",
+            fontFamily: "Libre Franklin",
+            fontWeight: "bolder",
+
         }}>Start Over!</button>
     )
 };

@@ -14,32 +14,72 @@ export default function Game() {
         rows: board(),
         idx: 0,
         idy: 0,
-        player: 'red',
+        player: 'Red',
         gameOver: false,
         countClick: 1,
         tie: false,
     }); // rows, x, y är states!
-    let playerTurn = state.player;
+
     return (
-        <div>
-            <h2>{playerTurn}</h2>
-            <Grid
-                rows={state.rows}
-                onClickCircle={(idx, idy) => dispatch({ type: 'circle', idx, idy })} />
-            <div>
-                {
-                    (state.gameOver || state.tie) && (   
-                        <>
-                        <p>{ state.gameOver ? `THE WINNER IS  ${state.player}` : `ITS A TIE!`}</p>
-                            <ResetButton onClickReset={() => dispatch({ type: 'reset' })} />
-                        </>
-                    )
-                }
+        <>
+            <div className="h2Container"
+                style={{
+                    marginTop: 10,
+                    width: 600,
+                    display: "flex",
+                    justifyContent: "space-between"
+
+                }}>
+                <div style={{
+                        backgroundColor: "palevioletred",
+                        borderRadius: 8,
+                        border: "2px solid grey",
+                        boxSizing: "border-box",
+                        display:"flex", 
+                        justifyContent: "center",
+
+                }}>
+                    <h2 style={{
+                        writingMode: "vertical-rl",
+                        textOrientation: "upright",
+                    }}>Connect four</h2>
+
+                </div>
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-around"
+                }}>
+                </div>
+
+                <Grid
+                    rows={state.rows}
+                    onClickCircle={(idx, idy) => dispatch({ type: 'circle', idx, idy })} />
+
             </div>
-        </div>
+            <div style={{
+                    width: 600,
+                    height: 180,
+                    marginTop: 10,
+                    backgroundColor: "palevioletred",
+                    borderRadius: 8,
+                    border: "2px solid grey",
+                    boxSizing: "border-box",
+
+                }}>
+                    <h2>Player : {state.player}</h2>
+                    {
+                        (state.gameOver || state.tie) && (
+                            <>
+                                <h4>{state.gameOver ? `The winner is ${state.player}` : `IT'S A TIE!`}</h4>
+                                <ResetButton onClickReset={() => dispatch({ type: 'reset' })} />
+                            </>
+                        )
+                    }
+                </div>
+        </>
     );
 }
-
+   
 
 function reducer(state, action) {
     switch (action.type) {
@@ -67,12 +107,12 @@ function reducer(state, action) {
             newRow[idx] = state.player;
             newRows[y] = newRow;
             console.log(y);
-            console.log(state.countClick);
+            
             
             return {
                 ...state,
                 rows: newRows,
-                player: !checkWinner(newRows) ? (state.player === 'red' ? 'blue' : 'red') : state.player,
+                player: !checkWinner(newRows) ? (state.player === 'Red' ? 'Blue' : 'Red') : state.player,
                 gameOver: checkWinner(newRows), // Denna rad är samma som if sats nedan!
                 countClick: state.countClick+1, 
                 tie: state.countClick === 42 ? true : false,
@@ -94,7 +134,7 @@ function reducer(state, action) {
                 rows: board(),
                 idx: 0,
                 idy: 0,
-                player: 'red',
+                player: 'Red',
                 gameOver: false
             };
 
@@ -102,6 +142,10 @@ function reducer(state, action) {
             return state;
     }
 }
+
+function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1)
+    }
 
 // action.type loggar case 'namn'
 // type = case

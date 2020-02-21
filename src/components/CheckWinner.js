@@ -26,7 +26,7 @@ function checkWinnerHorizontal(rows) {     //(state) kan också skrivas --> let 
 function checkWinnerVertical(rows) {
     console.log(rows);
     for (let i = 0; i < rows.length - 3; i++) {
-        for (let j = 0; j < 7; j++) {
+        for (let j = 0; j < 4; j++) {
             const x = rows[i][j];
             if (x && x === rows[i + 1][j] && x === rows[i + 2][j] && x === rows[i + 3][j]) {
                 console.log("THE WINNER IS", x);
@@ -40,9 +40,14 @@ function checkWinnerVertical(rows) {
 function checkWinnerDiagonalLeftToRight(rows) {
     console.log(rows);
     for (let i = 0; i < rows.length - 3; i++) {
-        for (let j = 0; j < 4; j++) {
-            const  x= rows[i][j];            
-            if (x && x === rows[i + 1][j - 1] && x === rows[i + 2][j - 2] && x === rows[i + 3][j - 3]) {
+        for (let j = 6; j >= 0; j--) {
+            const  x = rows[i][j];            
+            if (
+                x && 
+                x === rows[i + 1][j - 1] && 
+                x === rows[i + 2][j - 2] && 
+                x === rows[i + 3][j - 3]
+                ) {
                 console.log("THE WINNER IS", x);
                 return true;
             }
@@ -56,7 +61,12 @@ function checkWinnerDiagonalRightLeftTo(rows) {
     for (let i = 0; i < rows.length - 3; i++) {
         for (let j = 0; j < 4; j++) {
             const x = rows[i][j];
-            if (x && x === rows[i + 1][j + 1] && x === rows[i + 2][j + 2] && x === rows[i + 3][j + 3]) {
+            if (
+                x && 
+                x === rows[i + 1][j + 1] && 
+                x === rows[i + 2][j + 2] && 
+                x === rows[i + 3][j + 3]
+                ) {
                 console.log("THE WINNER IS", x);
                 return true;
             }
